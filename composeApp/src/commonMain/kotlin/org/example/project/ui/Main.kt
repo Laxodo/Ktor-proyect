@@ -1,7 +1,6 @@
 package org.example.project.ui
 
 
-import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,11 +14,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -38,7 +35,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowWidthSizeClass
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.example.project.ui.categoria.edit.CategoriaEdit
 import org.example.project.ui.categoria.edit.CategoriaEditViewModel
 import org.example.project.ui.categoria.edit.form.CategoriaForm
@@ -52,7 +48,6 @@ import org.example.project.ui.productos.edit.from.ProductoForm
 import org.example.project.ui.productos.edit.from.ProductoFormState
 import org.example.project.ui.productos.edit.from.ProductoFormViewModel
 import org.example.project.ui.productos.list.ProductoList
-import org.example.project.ui.productos.list.ProductosListViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -65,7 +60,7 @@ fun Main (){
     val navController = rememberNavController()
 
     val options by mainViewModel.options.collectAsState()
-    val wai = MutableStateFlow<WindowAdaptiveInfo?>(null)
+    val window = currentWindowAdaptiveInfo()
 
     mainViewModel.setOptions(
         listOf(
@@ -103,8 +98,6 @@ fun Main (){
         )
     )
 
-    val adaptiveInfo = currentWindowAdaptiveInfo()
-
     val navegador: @Composable () -> Unit = {
         NavHost(
             navController = navController,
@@ -120,6 +113,7 @@ fun Main (){
                     }
                 )
             }
+
             composable(Routes.CategoriaEditRoute) {
                 CategoriaEdit(
                     mainViewModel,
@@ -138,6 +132,7 @@ fun Main (){
                     }
                 )
             }
+
             composable(Routes.CategoriaFormRoute) {
                 val categoriaFormViewModel: CategoriaFormViewModel = koinViewModel(){
                     parametersOf(categoriaEditViewModel.selected.value, { it: CategoriaFormState -> {} })
@@ -171,12 +166,10 @@ fun Main (){
                 )
             }
 
-
-
-
             composable(Routes.ProductosViewListRoute) {
                 ProductoList(categoriaListViewModel.selected.value?.id!!)
             }
+
             composable(Routes.ProductoEditRoute) {
                 ProductoEdit(
                     mainViewModel,
@@ -195,6 +188,7 @@ fun Main (){
                     }
                 )
             }
+
             composable(Routes.ProductoFormRoute) {
                 val productoFormViewModel: ProductoFormViewModel = koinViewModel(){
                     parametersOf(productoEditViewModel.selected.value, { it: ProductoFormState -> {} })
@@ -232,12 +226,11 @@ fun Main (){
         }
     }
 
-    if (wai.collectAsState().value?.windowSizeClass?.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) {
+    if (window.windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) {
         Scaffold(
             bottomBar = {
                 NavigationBar {
                     mainViewModel.options.collectAsState().value.forEach { item ->
-                        // if(!item.admin || (item.admin && appViewModel.hasPermission()))
                         NavigationBarItem(
                             selected = true,
                             onClick = { item.action() },
@@ -256,21 +249,19 @@ fun Main (){
             drawerContent = {
                 PermanentDrawerSheet(
                     Modifier.then(
-                        if (wai.collectAsState().value?.windowSizeClass?.windowWidthSizeClass == WindowWidthSizeClass.COMPACT)
+                        if (window.windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT)
                             Modifier.width(128.dp)
                         else Modifier.width(128.dp)
                     )
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxHeight()  // ocupa todo el alto del drawer
+                        modifier = Modifier.fillMaxHeight()
                             .padding(vertical = 16.dp),
-                        verticalArrangement = Arrangement.Center,  // centra verticalmente
-                        horizontalAlignment = Alignment.CenterHorizontally  // opcional: centra horizontalmente
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(Modifier.height(16.dp))
                         options.forEach { item ->
-                            //si se tienen permiso
-                            // if(!item.admin || (item.admin && appViewModel.hasPermission()))
                             NavigationDrawerItem(
                                 icon = {
                                     Box(
@@ -285,11 +276,11 @@ fun Main (){
                                         )
                                     }
                                 },
-                                label = { wai.collectAsState().value?.windowSizeClass.toString() }, // sin texto
+                                label = { window.windowSizeClass.toString() },
                                 selected = false,
                                 onClick = { item.action() },
                                 modifier = Modifier
-                                    .padding(vertical = 4.dp) // espaciado entre items
+                                    .padding(vertical = 4.dp)
 
                             )
                         }
@@ -301,7 +292,6 @@ fun Main (){
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)
-                        // Add a fixed height constraint to prevent "Size out of range" error
                         .height(600.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -311,7 +301,4 @@ fun Main (){
             }
         )
     }
-
-
-
 }

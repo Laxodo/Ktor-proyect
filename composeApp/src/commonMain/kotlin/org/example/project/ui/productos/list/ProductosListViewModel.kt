@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.example.project.DispatcherIO
 import org.example.project.aplicacion.categoria.GetProductosFromCategoriaUseCase
-import org.example.project.aplicacion.producto.listar.GetAllProductosUseCase
 import org.example.project.aplicacion.producto.listar.ProductoDto
 
 class ProductosListViewModel(getProductosFromCategoriaUseCase: GetProductosFromCategoriaUseCase, id: String): ViewModel() {

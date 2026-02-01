@@ -28,12 +28,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
-import kotlinx.serialization.Serializable
 import org.example.project.aplicacion.producto.listar.ProductoDto
 import org.example.project.ui.MainViewModel
-import org.example.project.ui.categoria.edit.CategoriaEditCard
 
 @Composable
 fun ProductoEdit(

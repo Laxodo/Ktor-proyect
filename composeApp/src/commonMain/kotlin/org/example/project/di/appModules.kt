@@ -48,8 +48,8 @@ val moduloAplicacion = module {
 }
 
 val moduloDominio = module {
-    single<ICategoriaRepository> { CategoryRepository("http://localhost:8080/categorias",get ()) }
-    single<IProductoRepository> { ProductoRepository("http://localhost:8080/productos",get ()) }
+    single<ICategoriaRepository> { CategoryRepository("http://192.168.0.108:8080/categorias",get ()) }
+    single<IProductoRepository> { ProductoRepository("http://192.168.0.108:8080/productos",get ()) }
 }
 
 val moduloUI = module {
