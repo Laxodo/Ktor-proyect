@@ -4,6 +4,8 @@ pkgs.mkShell {
   buildInputs = [
     pkgs.jdk21
     pkgs.gradle
+    pkgs.mesa
+    pkgs.libGL
   ];
 
   shellHook = ''
